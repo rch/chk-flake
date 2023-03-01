@@ -38,7 +38,7 @@
           python310Packages.ansible-runner
         ]; 
       in {
-        overlays.default =  (self: rec {});
+        overlays.default =  (self: super: rec {});
         pkgs.symlinkJoin = {
           name = var-name;
           paths = [ setup-machines ] ++ var-buildInputs;
