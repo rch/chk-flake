@@ -1,5 +1,5 @@
 {
-  description = "Provision machines in CloudCat";
+  description = "Deploy";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
@@ -9,12 +9,12 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }: {
-    defaultPackage.x86_64-darwin = self.packages.x86_64-darwin.cloudera-setup;
+    defaultPackage.x86_64-darwin = self.packages.x86_64-darwin.chk-setup;
 
-    packages.x86_64-darwin.cloudera-setup = 
+    packages.x86_64-darwin.chk-setup = 
       let
 	pkgs = import nixpkgs { system = "x86_64-darwin"; };
-        var-name = "cloudera-setup";
+        var-name = "chk-setup";
         var-source = builtins.readFile ./deploy.sh;
         setup-machines = (pkgs.writeScriptBin var-name var-source).overrideAttrs(old: {
           buildCommand = "${old.buildCommand}\n patchShebangs $out";
