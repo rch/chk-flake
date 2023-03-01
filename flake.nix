@@ -13,7 +13,13 @@
 
     packages.x86_64-darwin.chk-setup = 
       let
-	pkgs = import nixpkgs { system = "x86_64-darwin"; };
+        system = "x86_64-darwin";
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            self.overlays.default
+          ];
+        };
         var-name = "chk-setup";
         var-source = builtins.readFile ./deploy.sh;
         setup-machines = (pkgs.writeScriptBin var-name var-source).overrideAttrs(old: {
@@ -31,11 +37,14 @@
           python310Packages.tox
           python310Packages.ansible-runner
         ]; 
-      in pkgs.symlinkJoin {
-        name = var-name;
-        paths = [ setup-machines ] ++ var-buildInputs;
-        buildInputs = [ pkgs.makeWrapper ];
-        postBuild = "wrapProgram $out/bin/${var-name} --prefix PATH : $out/bin";
+      in {
+        overlays.default =  (final: prev: rec {});
+        pkgs.symlinkJoin = {
+          name = var-name;
+          paths = [ setup-machines ] ++ var-buildInputs;
+          buildInputs = [ pkgs.makeWrapper ];
+          postBuild = "wrapProgram $out/bin/${var-name} --prefix PATH : $out/bin";
+        };
       };
   };
 }
