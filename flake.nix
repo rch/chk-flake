@@ -1,5 +1,5 @@
 {
-  description = "Delopy";
+  description = "Deploy";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
