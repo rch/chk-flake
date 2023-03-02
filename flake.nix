@@ -19,6 +19,9 @@
         setup-machines = (pkgs.writeScriptBin var-name var-source).overrideAttrs(old: {
           buildCommand = "${old.buildCommand}\n patchShebangs $out";
         });
+        ansible-runner = (pkgs.python310Packages.ansible-runner).overridePythonAttrs(old: {
+          doCheck = false;
+        });
         var-buildInputs = with pkgs; [
           jdk11_headless
           python310Full
@@ -29,6 +32,7 @@
           python310Packages.pyparsing
           python310Packages.sphinx
           python310Packages.tox
+          ansible-runner
         ]; 
       in pkgs.symlinkJoin {
         name = var-name;
