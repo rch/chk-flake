@@ -38,13 +38,16 @@
           python310Packages.ansible-runner
         ]; 
       in {
-        overlays.default =  (self: super: rec {});
+        overlays.default =  (final: prev: rec {
+          python310Packages.ansible-runner = final.python310Packages.ansible-runner.overridePythonAttrs(old: {doCheck=false;});
+        });
         pkgs.symlinkJoin = {
           name = var-name;
           paths = [ setup-machines ] ++ var-buildInputs;
           buildInputs = [ pkgs.makeWrapper ];
           postBuild = "wrapProgram $out/bin/${var-name} --prefix PATH : $out/bin";
         };
+        packages.x86_64-linux = pkgs;
       };
   };
 }
